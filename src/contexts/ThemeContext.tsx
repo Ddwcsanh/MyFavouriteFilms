@@ -1,4 +1,4 @@
-import React, { useEffect, useState, createContext, ReactNode } from 'react'
+import { useEffect, useState, createContext, ReactNode } from 'react'
 
 interface Theme {
   backgroundColor: string
