@@ -13,7 +13,7 @@ const Detail = () => {
 
   return (
     <Container
-      //   maxWidth='false'
+      maxWidth={false}
       sx={{
         display: 'flex',
         justifyContent: 'center',

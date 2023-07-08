@@ -14,19 +14,20 @@ import {
 import React, { useContext } from 'react'
 import { ThemeContext } from '~/contexts/ThemeContext'
 
-export default function Contact() {
+const Contact = () => {
   const { theme } = useContext(ThemeContext)
   const form = React.useRef()
 
   return (
     <Box
-      margin={{ xl: '3rem 2rem', md: '3rem 1rem', xs: '2rem' }}
+      padding={{ xl: '3rem 2rem', md: '3rem 1rem', xs: '2rem' }}
       style={{
         display: 'flex',
         flexWrap: 'wrap',
         alignContent: 'stretch',
         justifyContent: 'center',
-        minHeight: '72.9vh'
+        minHeight: '72.9vh',
+        backgroundColor: theme.backgroundColor
       }}
     >
       <Typography
@@ -261,3 +262,5 @@ export default function Contact() {
     </Box>
   )
 }
+
+export default Contact

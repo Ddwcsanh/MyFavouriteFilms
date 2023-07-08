@@ -10,7 +10,7 @@ interface FilmPresentationProps {
   films: Film[]
 }
 
-export default function FilmsPresentation(props: FilmPresentationProps) {
+const FilmsPresentation = (props: FilmPresentationProps) => {
   const navigate = useNavigate()
   const { theme } = React.useContext(ThemeContext)
   const handleClick = (id: number | undefined) => {
@@ -27,9 +27,10 @@ export default function FilmsPresentation(props: FilmPresentationProps) {
         padding: { xs: '0.5rem', sm: '1rem' },
         justifyContent: 'center'
       }}
+      style={{ backgroundColor: theme.backgroundColor }}
     >
       {props.films.map((film) => (
-        <Grid /*xs={12} sm={6} lg={4} item*/ xs={12} sm={6} lg={4} key={film.id}>
+        <Grid xs={12} sm={6} lg={4} key={film.id}>
           <Card
             style={{
               backgroundColor: theme.cardColor,
@@ -67,3 +68,5 @@ export default function FilmsPresentation(props: FilmPresentationProps) {
     </Grid>
   )
 }
+
+export default FilmsPresentation

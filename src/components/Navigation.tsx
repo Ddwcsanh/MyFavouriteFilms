@@ -12,7 +12,8 @@ import VideoStableRoundedIcon from '@mui/icons-material/VideoStableRounded'
 import Brightness6RoundedIcon from '@mui/icons-material/Brightness6Rounded'
 import { Link, useLocation } from 'react-router-dom'
 import { ThemeContext } from '~/contexts/ThemeContext'
-import { IconButton } from '@mui/material'
+import { Avatar, IconButton, Tooltip } from '@mui/material'
+import { UserAuth } from '~/contexts/AuthContext'
 
 const pages = ['Home', 'About', 'News', 'Contact']
 
@@ -37,6 +38,23 @@ function useActiveLink(initialLink: string) {
 }
 
 function ResponsiveAppBar() {
+  const { user, logout } = UserAuth()
+  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null)
+  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElUser(event.currentTarget)
+  }
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null)
+  }
+
+  const handleSignOut = async () => {
+    try {
+      await logout()
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null)
   const { toggle, theme } = React.useContext(ThemeContext)
 
@@ -45,7 +63,6 @@ function ResponsiveAppBar() {
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget)
   }
-
   const handleCloseNavMenu = () => {
     setAnchorElNav(null)
   }
@@ -180,6 +197,52 @@ function ResponsiveAppBar() {
               </Button>
             ))}
           </Box>
+
+          <Box sx={{ flexGrow: 0 }}>
+            {user?.displayName ? (
+              <div>
+                <Tooltip title='Open settings'>
+                  <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                    <Avatar alt={user?.email || 'User'} src={user?.photoURL || ''} />
+                  </IconButton>
+                </Tooltip>
+                <Menu
+                  sx={{ mt: '45px' }}
+                  id='menu-appbar'
+                  anchorEl={anchorElUser}
+                  anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right'
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right'
+                  }}
+                  open={Boolean(anchorElUser)}
+                  onClose={handleCloseUserMenu}
+                >
+                  <MenuItem onClick={handleCloseUserMenu}>
+                    <Typography textAlign='center'>
+                      <Link to='/dashboard' style={{ textDecoration: 'none' }}>
+                        Dashboard
+                      </Link>
+                    </Typography>
+                  </MenuItem>
+                  <MenuItem>
+                    <Typography textAlign='center' onClick={handleSignOut}>
+                      Logout
+                    </Typography>
+                  </MenuItem>
+                </Menu>
+              </div>
+            ) : (
+              <Link to='/login' style={{ textDecoration: 'none' }}>
+                <Button sx={{ my: 2, color: 'white', display: 'block' }}>Sign in</Button>
+              </Link>
+            )}
+          </Box>
+
           <IconButton sx={{ ml: 1 }} onClick={toggle} color='inherit' disableFocusRipple disableTouchRipple>
             <Brightness6RoundedIcon />
           </IconButton>

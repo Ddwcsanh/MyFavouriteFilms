@@ -45,7 +45,10 @@ const AboutUsPage = () => {
   ]
 
   return (
-    <Container style={{ color: theme.color, padding: '2rem 1rem 1rem' }}>
+    <Container
+      style={{ color: theme.color, backgroundColor: theme.backgroundColor, padding: '2rem 5rem 1rem' }}
+      maxWidth={false}
+    >
       <Typography variant='h4' align='center' gutterBottom>
         About me
       </Typography>
