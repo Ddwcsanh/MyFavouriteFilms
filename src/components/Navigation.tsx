@@ -199,7 +199,7 @@ const ResponsiveAppBar = () => {
                       padding: '0.5rem 1.5rem'
                     }}
                   >
-                    Management
+                    Films
                   </Typography>
                 </MenuItem>
               )}
