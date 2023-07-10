@@ -53,6 +53,6 @@ const AuthContextProvider = ({ children }: Props) => {
 
 export default AuthContextProvider
 
-export const UserAuth = () => {
+export const useAuth = () => {
   return React.useContext(AuthContext) as AuthContextType
 }

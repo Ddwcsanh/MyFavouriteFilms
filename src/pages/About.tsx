@@ -45,10 +45,7 @@ const AboutUsPage = () => {
   ]
 
   return (
-    <Container
-      style={{ color: theme.color, backgroundColor: theme.backgroundColor, padding: '2rem 5rem 1rem' }}
-      maxWidth={false}
-    >
+    <Container style={{ color: theme.color, padding: '2rem 0', minHeight: 'calc(100vh - 64px)' }} maxWidth={'xl'}>
       <Typography variant='h4' align='center' gutterBottom>
         About me
       </Typography>
@@ -84,10 +81,10 @@ const AboutUsPage = () => {
                   color: theme.color
                 }}
               >
-                <Typography variant='h6' gutterBottom>
+                <Typography variant='h6' gutterBottom fontWeight={600}>
                   {item.title}
                 </Typography>
-                <Typography variant='subtitle1' gutterBottom>
+                <Typography variant='subtitle1' gutterBottom fontWeight={600} style={{ color: theme.redPrimary }}>
                   {item.date}
                 </Typography>
                 <Typography variant='body1'>{item.description}</Typography>

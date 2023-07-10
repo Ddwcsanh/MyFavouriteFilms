@@ -1,10 +1,8 @@
-import { useState } from 'react'
 import FilmsPresentation from '~/components/FilmsPresentation'
-import { Films } from '~/shared/listOfFilms'
+import Loading from './Loading'
+import { useData } from '~/contexts/DataContext'
 
-const Main = () => {
-  const [film] = useState(Films)
-  return <FilmsPresentation films={film} />
+export default function Main() {
+  const { loading, films } = useData()
+  return loading ? <Loading /> : <FilmsPresentation films={films} />
 }
-
-export default Main

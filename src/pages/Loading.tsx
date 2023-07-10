@@ -6,7 +6,7 @@ const Loading = () => {
 
   return (
     <Box
-      height={'100vh'}
+      height={'calc(100vh - 64px)'}
       bgcolor={theme.palette.mode === 'dark' ? 'black' : 'white'}
       sx={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
     >

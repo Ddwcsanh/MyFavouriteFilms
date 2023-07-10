@@ -20,20 +20,20 @@ const Contact = () => {
 
   return (
     <Box
-      padding={{ xl: '3rem 2rem', md: '3rem 1rem', xs: '2rem' }}
+      padding={{ xl: '2rem 2rem', md: '3rem 1rem', xs: '2rem 1rem' }}
       style={{
         display: 'flex',
         flexWrap: 'wrap',
-        alignContent: 'stretch',
+        alignContent: 'start',
         justifyContent: 'center',
-        minHeight: '72.9vh',
+        minHeight: 'calc(100vh - 64px)',
         backgroundColor: theme.backgroundColor
       }}
     >
       <Typography
         sx={{
           textAlign: 'center',
-          height: 'rem',
+          height: '3rem',
           width: '100%',
           mb: '1rem'
         }}
@@ -132,16 +132,13 @@ const Contact = () => {
         >
           <TextField
             sx={{
-              marginTop: '5%',
+              marginTop: '2%',
               marginBottom: '2%',
               width: '85%',
               '.MuiOutlinedInput-root': {
                 color: theme.color
               },
               '.MuiOutlinedInput-notchedOutline': {
-                borderColor: theme.color
-              },
-              '.MuiHover-root': {
                 borderColor: theme.color
               }
             }}
@@ -157,7 +154,7 @@ const Contact = () => {
 
           <TextField
             sx={{
-              marginTop: '5%',
+              marginTop: '3%',
               marginBottom: '2%',
               width: '85%',
               '.MuiOutlinedInput-root': {
@@ -180,7 +177,7 @@ const Contact = () => {
 
           <TextField
             sx={{
-              marginTop: '5%',
+              marginTop: '3%',
               marginBottom: '2%',
               width: '85%',
               '.MuiOutlinedInput-root': {
@@ -202,7 +199,7 @@ const Contact = () => {
 
           <TextField
             sx={{
-              marginTop: '5%',
+              marginTop: '3%',
               marginBottom: '2%',
               width: '85%',
               '.MuiOutlinedInput-root': {
@@ -214,7 +211,7 @@ const Contact = () => {
             }}
             label='Message'
             multiline
-            rows={3}
+            rows={5}
             name='message'
             required
             InputLabelProps={{
@@ -227,7 +224,7 @@ const Contact = () => {
             sx={{
               width: '100%',
               display: 'flex',
-              marginBottom: '4%'
+              margin: '4% 0'
             }}
           >
             <Button

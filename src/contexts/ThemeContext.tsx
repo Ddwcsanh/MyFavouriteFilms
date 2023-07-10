@@ -3,9 +3,11 @@ import { useEffect, useState, createContext, ReactNode } from 'react'
 interface Theme {
   backgroundColor: string
   color: string
-  primaryColor: string
-  redPrimary: string
-  cardColor: string
+  primaryColor?: string
+  redPrimary?: string
+  redDarker?: string
+  cardColor?: string
+  white?: string
 }
 
 interface Themes {
@@ -25,14 +27,18 @@ const themes: Themes = {
     color: 'white',
     primaryColor: '#03091B',
     redPrimary: '#D32F2F',
-    cardColor: '#03091B'
+    redDarker: '#962929',
+    cardColor: '#03091B',
+    white: '#FFFFFF'
   },
   light: {
-    backgroundColor: '#DDDDDD',
+    backgroundColor: '#e3e3e3',
     color: '#232323',
     primaryColor: '#03091B',
     redPrimary: '#D32F2F',
-    cardColor: '#FFFFFF'
+    redDarker: '#962929',
+    cardColor: '#FFFFFF',
+    white: '#FFFFFF'
   }
 }
 

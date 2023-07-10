@@ -9,11 +9,11 @@ import Container from '@mui/material/Container'
 import Button from '@mui/material/Button'
 import MenuItem from '@mui/material/MenuItem'
 import VideoStableRoundedIcon from '@mui/icons-material/VideoStableRounded'
-import Brightness6RoundedIcon from '@mui/icons-material/Brightness6Rounded'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { ThemeContext } from '~/contexts/ThemeContext'
 import { Avatar, IconButton, Tooltip } from '@mui/material'
-import { UserAuth } from '~/contexts/AuthContext'
+import { Brightness4, Brightness7, Login } from '@mui/icons-material'
+import { useAuth } from '~/contexts/AuthContext'
 
 const pages = ['Home', 'About', 'News', 'Contact']
 
@@ -29,16 +29,20 @@ function useActiveLink(initialLink: string) {
     })
     if (page) {
       setActiveLink(`/${page.toLocaleLowerCase()}`)
+    } else if (location.pathname.includes('/detail')) {
+      setActiveLink('/home')
+    } else if (location.pathname.includes('/film-mng')) {
+      setActiveLink('/film-mng')
     } else {
-      setActiveLink('/')
+      setActiveLink('')
     }
   }, [location])
 
   return [activeLink, setActiveLink] // Return the state and setter function
 }
 
-function ResponsiveAppBar() {
-  const { user, logout } = UserAuth()
+const ResponsiveAppBar = () => {
+  const { user, logout } = useAuth()
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null)
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget)
@@ -56,7 +60,7 @@ function ResponsiveAppBar() {
   }
 
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null)
-  const { toggle, theme } = React.useContext(ThemeContext)
+  const { toggle, theme, dark } = React.useContext(ThemeContext)
 
   const [activeLink, setActiveLink] = useActiveLink('/home') // Use the custom hook
 
@@ -67,33 +71,57 @@ function ResponsiveAppBar() {
     setAnchorElNav(null)
   }
 
-  return (
-    <AppBar position='static' sx={{ backgroundColor: theme.primaryColor }}>
-      <Container maxWidth={false}>
-        <Toolbar>
-          <VideoStableRoundedIcon
-            sx={{
-              display: { xs: 'none', md: 'flex' },
-              margin: 'auto 2rem'
-            }}
-          />
-          <Typography
-            variant='h6'
-            noWrap
-            component={Link}
-            to='/'
-            sx={{
-              mr: { md: 2, lg: 10 },
-              display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
-              fontWeight: 'bold',
-              color: 'inherit',
-              textDecoration: 'none'
-            }}
-          >
-            MY FAVOURITE FILMS
-          </Typography>
+  // const { login } = UserAuth()
+  const navigate = useNavigate()
+  // const handleGoogleSignIn = async () => {
+  //   try {
+  //     await login()
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+  // }
 
+  React.useEffect(() => {
+    if (user != null) {
+      navigate('/')
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user])
+
+  const handleClick = (page: string) => {
+    typeof setActiveLink === 'function' && setActiveLink(`/${page.toLocaleLowerCase()}`)
+    window.scrollTo(0, 0)
+  }
+
+  return (
+    <AppBar position='fixed' sx={{ backgroundColor: theme.primaryColor, height: '64px' }}>
+      <Container maxWidth={false}>
+        <Toolbar sx={{ padding: { md: '0 2rem' } }} disableGutters>
+          <Box
+            sx={{
+              display: { xs: 'none', md: 'flex' },
+              justifyContent: 'center',
+              alignItems: 'center',
+              fontSize: '2rem',
+              mr: { md: '1rem', lg: '5rem' }
+            }}
+            component={Link}
+            to={'/'}
+          >
+            <VideoStableRoundedIcon sx={{ fontSize: '2rem', mr: '1rem' }} />
+            <Typography
+              variant='h6'
+              noWrap
+              sx={{
+                fontFamily: 'monospace',
+                fontWeight: 'bold',
+                color: 'inherit',
+                textDecoration: 'none'
+              }}
+            >
+              MY FAVOURITE FILMS
+            </Typography>
+          </Box>
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
               size='large'
@@ -138,7 +166,7 @@ function ResponsiveAppBar() {
                     component={Link}
                     fontWeight={'bold'}
                     to={page === 'Home' ? '/' : `/${page.toLocaleLowerCase()}`}
-                    onClick={() => typeof setActiveLink === 'function' && setActiveLink(`/${page.toLocaleLowerCase()}`)}
+                    onClick={() => handleClick(page)}
                     style={{
                       color: activeLink === `/${page.toLocaleLowerCase()}` ? theme.redPrimary : 'black',
                       textDecoration: 'none',
@@ -149,58 +177,117 @@ function ResponsiveAppBar() {
                   </Typography>
                 </MenuItem>
               ))}
+              {user && (
+                <MenuItem
+                  key='Film Management'
+                  onClick={handleCloseNavMenu}
+                  style={{
+                    padding: '0',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                  }}
+                >
+                  <Typography
+                    component={Link}
+                    fontWeight={'bold'}
+                    to='/film-mng'
+                    onClick={() => handleClick('Film Management')}
+                    style={{
+                      color: activeLink === '/film-mng' ? theme.redPrimary : 'black',
+                      textDecoration: 'none',
+                      padding: '0.5rem 1.5rem'
+                    }}
+                  >
+                    Management
+                  </Typography>
+                </MenuItem>
+              )}
             </Menu>
           </Box>
-          <VideoStableRoundedIcon sx={{ display: { xs: 'flex', md: 'none' }, margin: 'auto', mr: 1 }} />
-          <Typography
-            variant='h5'
-            noWrap
-            component={Link}
-            to='/'
+          <Box
             sx={{
-              mr: 0,
               display: { xs: 'flex', md: 'none' },
-              flexGrow: 1,
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              color: 'inherit',
-              textDecoration: 'none'
+              justifyContent: 'center',
+              alignItems: 'center',
+              fontSize: '2rem',
+              mr: { md: '1rem', lg: '5rem' },
+              flexGrow: 0.8
             }}
+            component={Link}
+            to={'/'}
           >
-            FILMS
-          </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }} height={'4rem'}>
+            <VideoStableRoundedIcon sx={{ mr: 2, fontSize: '2rem' }} />
+            <Typography
+              variant='h5'
+              noWrap
+              sx={{
+                mr: 0,
+                display: { xs: 'flex', md: 'none' },
+                flexGrow: 1,
+                fontFamily: 'monospace',
+                fontWeight: 700,
+                color: 'inherit',
+                textDecoration: 'none'
+              }}
+            >
+              FILMS
+            </Typography>
+          </Box>
+          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }} height={'4rem'} padding={'0 auto'}>
             {pages.map((page) => (
               <Button
                 key={page}
-                onClick={() => typeof setActiveLink === 'function' && setActiveLink(`/${page.toLocaleLowerCase()}`)}
+                onClick={() => handleClick(page)}
                 sx={{
                   color: 'white',
-                  display: 'block',
+                  display: 'flex',
                   borderRadius: 0,
                   boxShadow: 'none',
-                  padding: 0
+                  padding: 0,
+                  width: '10vw',
+                  height: '100%',
+                  '&:hover': {
+                    backgroundColor: theme.redDarker
+                  }
                 }}
                 variant={activeLink === `/${page.toLocaleLowerCase()}` ? 'contained' : 'text'}
                 color={'error'}
+                component={Link}
+                to={page === 'Home' ? '/' : `/${page.toLocaleLowerCase()}`}
               >
-                <Link
-                  style={{
-                    textDecoration: 'none',
-                    color: 'white',
-                    padding: '1.5rem 2.5rem'
-                  }}
-                  to={page === 'Home' ? '/' : `/${page.toLocaleLowerCase()}`}
-                >
-                  {page}
-                </Link>
+                {page}
               </Button>
             ))}
+            {user && (
+              <Button
+                key='Film Management'
+                onClick={() => handleClick('Film Management')}
+                sx={{
+                  color: 'white',
+                  display: 'flex',
+                  borderRadius: 0,
+                  boxShadow: 'none',
+                  padding: 0,
+                  width: '10vw',
+                  height: '100%',
+                  textAlign: 'center',
+                  '&:hover': {
+                    backgroundColor: theme.redDarker
+                  }
+                }}
+                variant={activeLink === '/film-mng' ? 'contained' : 'text'}
+                color={'error'}
+                component={Link}
+                to='/film-mng'
+              >
+                Films
+              </Button>
+            )}
           </Box>
-
-          <Box sx={{ flexGrow: 0 }}>
-            {user?.displayName ? (
-              <div>
+          <Box sx={{ flexGrow: 0 }} display={'flex'}>
+            {user ? (
+              <>
                 <Tooltip title='Open settings'>
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                     <Avatar alt={user?.email || 'User'} src={user?.photoURL || ''} />
@@ -222,30 +309,64 @@ function ResponsiveAppBar() {
                   open={Boolean(anchorElUser)}
                   onClose={handleCloseUserMenu}
                 >
-                  <MenuItem onClick={handleCloseUserMenu}>
-                    <Typography textAlign='center'>
-                      <Link to='/dashboard' style={{ textDecoration: 'none' }}>
-                        Dashboard
-                      </Link>
+                  <MenuItem
+                    onClick={handleCloseUserMenu}
+                    style={{
+                      padding: '0',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center'
+                    }}
+                  >
+                    <Typography
+                      component={Link}
+                      fontWeight={'bold'}
+                      to={'/profile'}
+                      style={{
+                        textDecoration: 'none',
+                        padding: '0.5rem 1.5rem'
+                      }}
+                    >
+                      Profile
                     </Typography>
                   </MenuItem>
-                  <MenuItem>
-                    <Typography textAlign='center' onClick={handleSignOut}>
+                  <MenuItem
+                    onClick={handleCloseUserMenu}
+                    style={{
+                      padding: '0',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center'
+                    }}
+                  >
+                    <Typography
+                      fontWeight={'bold'}
+                      onClick={handleSignOut}
+                      style={{
+                        textDecoration: 'none',
+                        padding: '0.5rem 1.5rem'
+                      }}
+                    >
                       Logout
                     </Typography>
                   </MenuItem>
                 </Menu>
-              </div>
+              </>
             ) : (
-              <Link to='/login' style={{ textDecoration: 'none' }}>
-                <Button sx={{ my: 2, color: 'white', display: 'block' }}>Sign in</Button>
-              </Link>
+              <Button
+                sx={{ color: 'white', lineHeight: 0 }}
+                startIcon={<Login />}
+                onClick={() => {
+                  navigate('/login')
+                }}
+              >
+                Sign in
+              </Button>
             )}
+            <IconButton sx={{ ml: 1 }} onClick={toggle} color='inherit' disableFocusRipple disableTouchRipple>
+              {dark ? <Brightness7 /> : <Brightness4 />}
+            </IconButton>
           </Box>
-
-          <IconButton sx={{ ml: 1 }} onClick={toggle} color='inherit' disableFocusRipple disableTouchRipple>
-            <Brightness6RoundedIcon />
-          </IconButton>
         </Toolbar>
       </Container>
     </AppBar>
